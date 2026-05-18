@@ -1,3 +1,21 @@
+mport numpy as np
+from PIL import Image
+
+# 1. Encoding
+msg = "Secret Message"
+delimiter = "@@@@"
+message = msg + delimiter
+binary_msg = "".join(format(ord(c), "08b") for c in message)
+
+img = Image.open("input.jpg").convert("RGB")
+data = np.array(img)
+flat_data = data.flatten()
+
+for i in range(len(binary_msg)):
+    flat_data[i] = (flat_data[i] & 254) | int(binary_msg[i])
+
+encoded_img = flat_data.reshape(data.shape)
+Image.fromarray(encoded_img.astype("uint8")).save("output.png")
 
 
 # 2. Decoding
